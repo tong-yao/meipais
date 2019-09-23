@@ -2,14 +2,15 @@
 # @Time    : 2019/9/20 2:46 下午
 # @Software: PyCharm
 
-import requests, re, json, pymysql,hashlib,os
+import requests, re, json, pymysql,hashlib,os,logging
 from lxml import etree
 #from ffmpeg import stream
 #ss = stream.Stream()
 filePath = '/home/ceshi_video/'
 files = os.listdir(filePath)
-print(files)
-print(type(files))
+logging.basicConfig(filename="/var/www/meipais/zhongzi_log.txt", filemode="a",
+                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+                    level=logging.INFO)
 
 while True:
     response = requests.get("https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00097130717737&local_time=1568950301671&locale=1&lon=116.3998155410576&model=iPhone7%2C1&network=wifi&os=9.3.3&page=1&resolution=1080%2A1920&sig=70de8ec4453d203ca30905fdc7256c3b&sigTime=1568950301671&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",verify=False)
@@ -42,6 +43,7 @@ while True:
         comments_url = i["media"]["url"]
         jpg_url = i['media']["cover_pic"]
         caption = i['media']["caption"]
+        logging.INFO(comments_url)
 
         id = re.search(".*utm_media_id=(\d+)", comments_url).group(1)
 
