@@ -64,11 +64,6 @@ while True:
                 break
             elif files_num == len(files):
                 files.append(video_name + ".mp4")
-                video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
-                video_duration = video_data.get("format").get("duration")
-                # print("视频时长:{}".format(video_duration))
-                video_size = video_data.get("format").get("size")
-                # print("视频大小:{}".format(video_size))
                 with open('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
                     f.write(c)
                 files.append('{}.mp4'.format(video_name))
@@ -79,6 +74,11 @@ while True:
                 with open("/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
                     f.write(jpg)
                 image_path = "/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name)
+                video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
+                video_duration = video_data.get("format").get("duration")
+                # print("视频时长:{}".format(video_duration))
+                video_size = video_data.get("format").get("size")
+                # print("视频大小:{}".format(video_size))
 
                 with db.cursor() as cursor:
                     try:
