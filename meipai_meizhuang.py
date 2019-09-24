@@ -5,7 +5,7 @@
 import requests, re, json, pymysql, hashlib, os, logging,ffmpeg
 from lxml import etree
 
-filePath = '/home/ceshi_video/'
+filePath = '/home/oss/t/a/ceshi_video/'
 files = os.listdir(filePath)
 logging.basicConfig(filename="/var/www/meipais/zhongzi_log.txt", filemode="a",
                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
@@ -64,21 +64,21 @@ while True:
                 break
             elif files_num == len(files):
                 files.append(video_name + ".mp4")
-                video_data = ffmpeg.probe('/home/ceshi_video/{}.mp4'.format(video_name))
+                video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
                 video_duration = video_data.get("format").get("duration")
                 # print("视频时长:{}".format(video_duration))
                 video_size = video_data.get("format").get("size")
                 # print("视频大小:{}".format(video_size))
-                with open('/home/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
+                with open('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
                     f.write(c)
                 files.append('{}.mp4'.format(video_name))
-                video_path = '/home/ceshi_video/{}.mp4'.format(video_name)
+                video_path = '/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name)
                 jpg = jpg_re.content
                 md5.update(jpg)
                 jpg_name = md5.hexdigest()
-                with open("/home/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
+                with open("/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
                     f.write(jpg)
-                image_path = "/home/ceshi_jpg/{}.jpg".format(jpg_name)
+                image_path = "/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name)
 
                 with db.cursor() as cursor:
                     try:
