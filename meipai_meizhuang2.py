@@ -7,11 +7,12 @@ from lxml import etree
 
 filePath = '/home/oss/t/a/ceshi_video/'
 files = os.listdir(filePath)
-logging.basicConfig(filename="/var/www/meipais/zhongzi_log.txt", filemode="a",
+logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
                     level=logging.INFO)
 
 while True:
+    logging.info("gongzuo")
     response = requests.get(
         "https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00101985683872&local_time=1569319871705&locale=1&lon=116.3996890463309&model=iPhone7%2C1&network=wifi&os=9.3.3&page=2&resolution=1080%2A1920&sig=6bd90f114af5583519c1a999e78166f5&sigTime=1569319871705&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",
         verify=False)
