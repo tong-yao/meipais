@@ -49,150 +49,153 @@ while True:
         caption = i["recommend_caption"]
         logging.info(comments_url)
 
-        id = re.search(".*utm_media_id=(\d+)", comments_url).group(1)
+        if caption:
+            id = re.search(".*utm_media_id=(\d+)", comments_url).group(1)
 
-        response = requests.get(video_urls, verify=False)
-        jpg_re = requests.get(jpg_url, verify=False)
+            response = requests.get(video_urls, verify=False)
+            jpg_re = requests.get(jpg_url, verify=False)
 
-        c = response.content
-        md5 = hashlib.md5()
-        md5.update(c)
-        video_name = md5.hexdigest()
-        files_num = 1
-        for i in files:
-            if video_name + ".mp4" == i:
-                break
-            elif files_num == len(files):
-                files.append(video_name + ".mp4")
-                with open('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
-                    f.write(c)
-                files.append('{}.mp4'.format(video_name))
-                video_path = '/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name)
-                jpg = jpg_re.content
-                md5.update(jpg)
-                jpg_name = md5.hexdigest()
-                with open("/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
-                    f.write(jpg)
-                image_path = "/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name)
-                video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
-                video_duration = video_data.get("format").get("duration")
-                # print("视频时长:{}".format(video_duration))
-                video_size = video_data.get("format").get("size")
-                # print("视频大小:{}".format(video_size))
+            c = response.content
+            md5 = hashlib.md5()
+            md5.update(c)
+            video_name = md5.hexdigest()
+            files_num = 1
+            for i in files:
+                if video_name + ".mp4" == i:
+                    break
+                elif files_num == len(files):
+                    files.append(video_name + ".mp4")
+                    with open('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
+                        f.write(c)
+                    files.append('{}.mp4'.format(video_name))
+                    video_path = '/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name)
+                    jpg = jpg_re.content
+                    md5.update(jpg)
+                    jpg_name = md5.hexdigest()
+                    with open("/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
+                        f.write(jpg)
+                    image_path = "/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name)
+                    video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
+                    video_duration = video_data.get("format").get("duration")
+                    # print("视频时长:{}".format(video_duration))
+                    video_size = video_data.get("format").get("size")
+                    # print("视频大小:{}".format(video_size))
 
-                with db.cursor() as cursor:
+                    with db.cursor() as cursor:
+                        try:
+                            sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0)".format(
+                                id, video_path, image_path, caption, video_size)
+                            cursor.execute(sql)
+
+                        except Exception as e:
+                            print("eeeeeee", e)
+                            print(sql)
+                        db.commit()
+
                     try:
-                        sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0)".format(
-                            id, video_path, image_path, caption,video_size)
-                        cursor.execute(sql)
+                        for i in range(1, 7):
+                            response = requests.get(
+                                "https://www.meipai.com/medias/comments_timeline?page={}&count=10&id={}".format(i, id),
+                                verify=False)
+                            r = response.content.decode()
+                            c = json.loads(r)
+                            if len(c) > 8:
+                                for i in c:
+                                    if i["content"] == '[图片评论，请下载客户端新版查看]':
+                                        continue
+                                    elif i["content"].startswith("回复"):
+                                        c = re.compile(r"</span>：(.*)")
+                                        comments = re.findall(c, i['content'])
+                                        for i in comments:
+                                            comments = str(i)
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                                    elif i["content"].startswith("<span"):
+                                        c = re.compile(r"</span> (.*)")
+                                        comments = re.findall(c, i['content'])
+                                        for i in comments:
+                                            comments = str(i)
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                                    else:
+                                        comments = str(i['content'])
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                            else:
+                                for i in c:
+                                    if i["content"] == '[图片评论，请下载客户端新版查看]':
+                                        continue
+                                    elif i["content"].startswith("回复"):
+                                        c = re.compile(r"</span>：(.*)")
+                                        comments = re.findall(c, i['content'])
+                                        for i in comments:
+                                            comments = str(i)
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                                    elif i["content"].startswith("<span"):
+                                        c = re.compile(r"</span> (.*)")
+                                        comments = re.findall(c, i['content'])
+                                        for i in comments:
+                                            comments = str(i)
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                                    else:
+                                        comments = str(i['content'])
+                                        with db.cursor() as cursor:
+                                            try:
+                                                sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+                                                    id, comments)
+                                                cursor.execute(sql)
+                                            except Exception as e:
+                                                print(sql)
+                                                print(e)
+                                            db.commit()
+                                break
 
                     except Exception as e:
-                        print("eeeeeee", e)
-                        print(sql)
-                    db.commit()
-
-                try:
-                    for i in range(1, 7):
-                        response = requests.get(
-                            "https://www.meipai.com/medias/comments_timeline?page={}&count=10&id={}".format(i, id),
-                            verify=False)
-                        r = response.content.decode()
-                        c = json.loads(r)
-                        if len(c) > 8:
-                            for i in c:
-                                if i["content"] == '[图片评论，请下载客户端新版查看]':
-                                    continue
-                                elif i["content"].startswith("回复"):
-                                    c = re.compile(r"</span>：(.*)")
-                                    comments = re.findall(c, i['content'])
-                                    for i in comments:
-                                        comments = str(i)
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                                elif i["content"].startswith("<span"):
-                                    c = re.compile(r"</span> (.*)")
-                                    comments = re.findall(c, i['content'])
-                                    for i in comments:
-                                        comments = str(i)
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                                else:
-                                    comments = str(i['content'])
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                        else:
-                            for i in c:
-                                if i["content"] == '[图片评论，请下载客户端新版查看]':
-                                    continue
-                                elif i["content"].startswith("回复"):
-                                    c = re.compile(r"</span>：(.*)")
-                                    comments = re.findall(c, i['content'])
-                                    for i in comments:
-                                        comments = str(i)
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                                elif i["content"].startswith("<span"):
-                                    c = re.compile(r"</span> (.*)")
-                                    comments = re.findall(c, i['content'])
-                                    for i in comments:
-                                        comments = str(i)
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                                else:
-                                    comments = str(i['content'])
-                                    with db.cursor() as cursor:
-                                        try:
-                                            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
-                                                id, comments)
-                                            cursor.execute(sql)
-                                        except Exception as e:
-                                            print(sql)
-                                            print(e)
-                                        db.commit()
-                            break
-
-                except Exception as e:
-                    print(e)
-                break
+                        print(e)
+                    break
 
             else:
                 files_num += 1
                 continue
 
+        else:
+            break
 # 来源和评论内容
 # 视频来源，图片地址，视频地址，标题，视频大小，是否上传，去看吧id

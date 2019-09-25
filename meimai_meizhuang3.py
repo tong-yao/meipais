@@ -13,7 +13,7 @@ logging.basicConfig(filename="/var/www/meipais/zhongzi_log.txt", filemode="a",
 
 while True:
     response = requests.get(
-        "https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00097130717737&local_time=1568950301671&locale=1&lon=116.3998155410576&model=iPhone7%2C1&network=wifi&os=9.3.3&page=1&resolution=1080%2A1920&sig=70de8ec4453d203ca30905fdc7256c3b&sigTime=1568950301671&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",
+        "https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00109870380246&local_time=1569378599225&locale=1&lon=116.3995198266256&model=iPhone7%2C1&network=wifi&os=9.3.3&page=1&resolution=1080%2A1920&sig=e37399048fbef867cb2fcd5d39ce73ea&sigTime=1569378599224&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",
         verify=False)
     a = response.content.decode()
     a = json.loads(a)
@@ -190,13 +190,12 @@ while True:
                     except Exception as e:
                         print(e)
                     break
-     else:
 
+            else:
                 files_num += 1
                 continue
 
         else:
             break
-
 # 来源和评论内容
 # 视频来源，图片地址，视频地址，标题，视频大小，是否上传，去看吧id
