@@ -53,6 +53,7 @@ while True:
         logging.info(comments_url)
 
         if caption:
+            logging.info("youbiaoti")
             id = re.search(".*utm_media_id=(\d+)", comments_url).group(1)
 
             response = requests.get(video_urls, verify=False)
@@ -65,8 +66,10 @@ while True:
             files_num = 1
             for i in files:
                 if video_name + ".mp4" == i:
+                    logging.info("chongfule")
                     break
                 elif files_num == len(files):
+                    logging.info("xieru")
                     files.append(video_name + ".mp4")
                     with open('/home/oss/p/datavideo/{}.mp4'.format(video_name), "wb") as f:
                         f.write(c)
@@ -199,7 +202,7 @@ while True:
                 continue
 
         else:
-            break
+            continue
 
 # 来源和评论内容
 # 视频来源，图片地址，视频地址，标题，视频大小，是否上传，去看吧id
