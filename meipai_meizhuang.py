@@ -35,7 +35,7 @@ db = connect_mysql()
 def commint_mysql(id, comments):
     with db.cursor() as cursor:
         try:
-            sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
+            sql = "INSERT INTO comment(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
                 id, comments)
             cursor.execute(sql)
         except Exception as e:
@@ -176,7 +176,7 @@ while True:
 
                 with db.cursor() as cursor:
                     try:
-                        sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`,`old_app_id`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0,{})".format(
+                        sql = "INSERT INTO video(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`,`old_app_id`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0,{})".format(
                             id, video_path, image_path, caption, video_size, user_id)
                         cursor.execute(sql)
 
