@@ -5,7 +5,8 @@
 import requests, re, json, pymysql, hashlib, os, logging,ffmpeg
 from lxml import etree
 
-filePath = '/home/oss/t/a/ceshi_video/'
+# filePath = '/home/oss/t/a/ceshi_video/'
+filePath = '/home/oss/p/datavideo'
 files = os.listdir(filePath)
 logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
@@ -48,6 +49,7 @@ while True:
         comments_url = i["media"]["url"]
         jpg_url = i['media']["cover_pic"]
         caption = i["recommend_caption"]
+        user_id = i["media"]["user"]["id"]
         logging.info(comments_url)
 
         if caption:
@@ -66,17 +68,17 @@ while True:
                     break
                 elif files_num == len(files):
                     files.append(video_name + ".mp4")
-                    with open('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name), "wb") as f:
+                    with open('/home/oss/p/datavideo/{}.mp4'.format(video_name), "wb") as f:
                         f.write(c)
                     files.append('{}.mp4'.format(video_name))
-                    video_path = '/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name)
+                    video_path = '/home/oss/p/datavideo/{}.mp4'.format(video_name)
                     jpg = jpg_re.content
                     md5.update(jpg)
                     jpg_name = md5.hexdigest()
-                    with open("/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name), "wb") as f:
+                    with open("/home/oss/p/datajpg/{}.jpg".format(jpg_name), "wb") as f:
                         f.write(jpg)
-                    image_path = "/home/oss/t/a/ceshi_jpg/{}.jpg".format(jpg_name)
-                    video_data = ffmpeg.probe('/home/oss/t/a/ceshi_video/{}.mp4'.format(video_name))
+                    image_path = "/home/oss/p/datajpg/{}.jpg".format(jpg_name)
+                    video_data = ffmpeg.probe('/home/oss/p/datavideo/{}.mp4'.format(video_name))
                     video_duration = video_data.get("format").get("duration")
                     # print("视频时长:{}".format(video_duration))
                     video_size = video_data.get("format").get("size")
@@ -84,8 +86,8 @@ while True:
 
                     with db.cursor() as cursor:
                         try:
-                            sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0)".format(
-                                id, video_path, image_path, caption, video_size)
+                            sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`,`old_app_id`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0,{})".format(
+                                id, video_path, image_path, caption, video_size,user_id)
                             cursor.execute(sql)
 
                         except Exception as e:
@@ -108,7 +110,7 @@ while True:
                                         c = re.compile(r"</span>：(.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i)
+                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -122,7 +124,7 @@ while True:
                                         c = re.compile(r"</span> (.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i)
+                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -133,7 +135,7 @@ while True:
                                                 print(e)
                                             db.commit()
                                     else:
-                                        comments = str(i['content'])
+                                        comments = str(i['content']).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -151,7 +153,7 @@ while True:
                                         c = re.compile(r"</span>：(.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i)
+                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -165,7 +167,7 @@ while True:
                                         c = re.compile(r"</span> (.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i)
+                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -176,7 +178,7 @@ while True:
                                                 print(e)
                                             db.commit()
                                     else:
-                                        comments = str(i['content'])
+                                        comments = str(i['content']).replace("[图片评论，请下载客户端新版查看]","")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
