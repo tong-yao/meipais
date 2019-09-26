@@ -197,9 +197,9 @@ while True:
                         print(e)
                     break
 
-            else:
-                files_num += 1
-                continue
+                else:
+                    files_num += 1
+                    continue
 
         else:
             continue
