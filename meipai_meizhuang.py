@@ -6,8 +6,6 @@ import requests, re, json, pymysql, hashlib, os, logging, ffmpeg
 from lxml import etree
 
 # filePath = '/home/oss/t/a/ceshi_video/'
-filePath = '/home/oss/p/datavideo'
-files = os.listdir(filePath)
 logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
                     level=logging.INFO)
@@ -121,7 +119,7 @@ def commint(c, id):
 while True:
     # logging.info("gongzuo")
     response = requests.get(
-        "https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00097130717737&local_time=1568950301671&locale=1&lon=116.3998155410576&model=iPhone7%2C1&network=wifi&os=9.3.3&page=1&resolution=1080%2A1920&sig=70de8ec4453d203ca30905fdc7256c3b&sigTime=1568950301671&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",
+        "https://api.meipai.com/channels/feed_timeline.json?build=7741&channel=8888&client_id=1089857299&device_id=BFD501B4-8100-43AF-B462-7D8A2527AF91&id=27&idfa=25119624-6F29-4F1C-9B78-938686948775&language=zh-Hans&lat=40.00101985683872&local_time=1569319871705&locale=1&lon=116.3996890463309&model=iPhone7%2C1&network=wifi&os=9.3.3&page=2&resolution=1080%2A1920&sig=6bd90f114af5583519c1a999e78166f5&sigTime=1569319871705&sigVersion=1.3&stat_gid=24844116&version=8.2.12&with_friend_ship=0",
         verify=False)
     a = response.content.decode()
     a = json.loads(a)
@@ -137,6 +135,12 @@ while True:
         # logging.info(comments_url)
 
         if caption:
+            filePath = '/home/oss/p/datavideo'
+            files = os.listdir(filePath)
+            files_num = 1
+            print("aaaaaaa")
+            print(type(files))
+            print("bbbbbbbbb")
             id = re.search(".*utm_media_id=(\d+)", comments_url).group(1)
 
             response = requests.get(video_urls, verify=False)
@@ -146,9 +150,13 @@ while True:
             md5 = hashlib.md5()
             md5.update(c)
             video_name = md5.hexdigest()
-            files_num = 1
             for i in files:
+                i = str(i)
+                print("zheshidiyige",type(i))
+                logging.info("zheshidiyige",i)
                 if video_name + ".mp4" == i:
+                    logging.info("这是第一个",i)
+                    logging.info("{}.mp4".format(video_name))
                     logging.info("chongfule")
                     break
                 elif files_num == len(files):
