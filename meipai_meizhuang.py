@@ -151,6 +151,7 @@ while True:
             md5.update(c)
             video_name = md5.hexdigest()
             if video_name + ".mp4" in files:
+                logging.info("chongfule")
                 print("1231")
                 break
             else:
@@ -180,7 +181,7 @@ while True:
                         cursor.execute(sql)
 
                     except Exception as e:
-                        print("eeeeeee", e)
+                        logging.info("eeeeeee", e)
                         print(sql)
                     db.commit()
 
@@ -198,9 +199,6 @@ while True:
                     #             break
                     # except Exception as e:
                     #     print(e)
-                else:
-                    files_num += 1
-                    continue
 
         else:
             continue
