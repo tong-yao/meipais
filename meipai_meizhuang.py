@@ -150,17 +150,10 @@ while True:
             md5 = hashlib.md5()
             md5.update(c)
             video_name = md5.hexdigest()
-            cccccc = 0
             for i in files:
-                print("循环{}".format(cccccc))
-                cccccc+=1
-                i = str(i)
-                print("zheshidiyige",type(i))
-                logging.info("zheshidiyige",i)
                 if video_name + ".mp4" == i:
-                    logging.info("这是第一个",i)
-                    logging.info("{}.mp4".format(video_name))
-                    logging.info("chongfule")
+                    print("chongfule")
+                    logging.info("重复了")
                     break
                 elif files_num == len(files):
                     print("dayinle  afawesgerteyuhgdfdjyhtrdtysr")
