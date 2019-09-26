@@ -150,7 +150,10 @@ while True:
             md5 = hashlib.md5()
             md5.update(c)
             video_name = md5.hexdigest()
+            cccccc = 0
             for i in files:
+                print("循环{}".format(cccccc))
+                cccccc+=1
                 i = str(i)
                 print("zheshidiyige",type(i))
                 logging.info("zheshidiyige",i)
@@ -161,35 +164,35 @@ while True:
                     break
                 elif files_num == len(files):
                     print("dayinle  afawesgerteyuhgdfdjyhtrdtysr")
-                    # logging.info("xieru")
-                    # files.append(video_name + ".mp4")
-                    # with open('/home/oss/p/datavideo/{}.mp4'.format(video_name), "wb") as f:
-                    #     f.write(c)
-                    # files.append('{}.mp4'.format(video_name))
-                    # video_path = '/home/oss/p/datavideo/{}.mp4'.format(video_name)
-                    # jpg = jpg_re.content
-                    # md5.update(jpg)
-                    # jpg_name = md5.hexdigest()
-                    # with open("/home/oss/p/datajpg/{}.jpg".format(jpg_name), "wb") as f:
-                    #     f.write(jpg)
-                    # image_path = "/home/oss/p/datajpg/{}.jpg".format(jpg_name)
-                    # video_data = ffmpeg.probe('/home/oss/p/datavideo/{}.mp4'.format(video_name))
-                    # video_duration = video_data.get("format").get("duration")
-                    # # print("视频时长:{}".format(video_duration))
-                    # video_size = video_data.get("format").get("size")
-                    # # print("视频大小:{}".format(video_size))
-                    #
-                    # with db.cursor() as cursor:
-                    #     try:
-                    #         sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`,`old_app_id`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0,{})".format(
-                    #             id, video_path, image_path, caption, video_size, user_id)
-                    #         cursor.execute(sql)
-                    #
-                    #     except Exception as e:
-                    #         print("eeeeeee", e)
-                    #         print(sql)
-                    #     db.commit()
-                    #
+                    logging.info("xieru")
+                    files.append(video_name + ".mp4")
+                    with open('/home/oss/p/datavideo/{}.mp4'.format(video_name), "wb") as f:
+                        f.write(c)
+                    files.append('{}.mp4'.format(video_name))
+                    video_path = '/home/oss/p/datavideo/{}.mp4'.format(video_name)
+                    jpg = jpg_re.content
+                    md5.update(jpg)
+                    jpg_name = md5.hexdigest()
+                    with open("/home/oss/p/datajpg/{}.jpg".format(jpg_name), "wb") as f:
+                        f.write(jpg)
+                    image_path = "/home/oss/p/datajpg/{}.jpg".format(jpg_name)
+                    video_data = ffmpeg.probe('/home/oss/p/datavideo/{}.mp4'.format(video_name))
+                    video_duration = video_data.get("format").get("duration")
+                    # print("视频时长:{}".format(video_duration))
+                    video_size = video_data.get("format").get("size")
+                    # print("视频大小:{}".format(video_size))
+
+                    with db.cursor() as cursor:
+                        try:
+                            sql = "INSERT INTO video_copy1(`source`,`ref_id`,`video_path`,`image_path`,`title`,`size`,`status`,`video_id_test`,`video_id_prod`,`old_app_id`) values('美拍美妆',{},'{}','{}','{}',{},0,0,0,{})".format(
+                                id, video_path, image_path, caption, video_size, user_id)
+                            cursor.execute(sql)
+
+                        except Exception as e:
+                            print("eeeeeee", e)
+                            print(sql)
+                        db.commit()
+
                     # try:
                     #     for i in range(1, 7):
                     #         response = requests.get(
