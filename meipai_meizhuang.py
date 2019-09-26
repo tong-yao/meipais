@@ -185,20 +185,20 @@ while True:
                         print(sql)
                     db.commit()
 
-                    # try:
-                    #     for i in range(1, 7):
-                    #         response = requests.get(
-                    #             "https://www.meipai.com/medias/comments_timeline?page={}&count=10&id={}".format(i, id),
-                    #             verify=False)
-                    #         r = response.content.decode()
-                    #         c = json.loads(r)
-                    #         if len(c) > 8:
-                    #             commint(c, id)
-                    #         else:
-                    #             commint(c, id)
-                    #             break
-                    # except Exception as e:
-                    #     print(e)
+                    try:
+                        for i in range(1, 7):
+                            response = requests.get(
+                                "https://www.meipai.com/medias/comments_timeline?page={}&count=10&id={}".format(i, id),
+                                verify=False)
+                            r = response.content.decode()
+                            c = json.loads(r)
+                            if len(c) > 8:
+                                commint(c, id)
+                            else:
+                                commint(c, id)
+                                break
+                    except Exception as e:
+                        print(e)
 
         else:
             continue
