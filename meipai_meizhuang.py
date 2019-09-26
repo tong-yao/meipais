@@ -113,7 +113,15 @@ while True:
                                         c = re.compile(r"</span>：(.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                            comments = str(i)
+                                            zhengze = re.compile(r"<span.*?</span>")
+                                            zz_comments = re.findall(zhengze,comments)
+                                            if zz_comments:
+                                                comments = comments.replace(zz_comments[0],"")
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]","")
+                                            else:
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]","")
+                                            logging.info(comments)
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -127,7 +135,15 @@ while True:
                                         c = re.compile(r"</span> (.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                            comments = str(i)
+                                            zhengze = re.compile(r"<span.*?</span>")
+                                            zz_comments = re.findall(zhengze,comments)
+                                            if zz_comments:
+                                                comments = comments.replace(zz_comments[0],"")
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]","")
+                                            else:
+                                                comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                            logging.info(comments)
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -138,7 +154,15 @@ while True:
                                                 print(e)
                                             db.commit()
                                     else:
-                                        comments = str(i['content']).replace("[图片评论，请下载客户端新版查看]","")
+                                        comments = str(i['content'])
+                                        zhengze = re.compile(r"<span.*?</span>")
+                                        zz_comments = re.findall(zhengze, comments)
+                                        if zz_comments:
+                                            comments = comments.replace(zz_comments[0],"")
+                                            comments = comments.replace("[图片评论，请下载客户端新版查看]",'')
+                                        else:
+                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                        logging.info(comments)
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -156,7 +180,15 @@ while True:
                                         c = re.compile(r"</span>：(.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                            comments = str(i)
+                                            zhengze = re.compile(r"<span.*?</span>")
+                                            zz_comments = re.findall(zhengze,comments)
+                                            if zz_comments:
+                                                comments = comments.replace(zz_comments[0],"")
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]","")
+                                            else:
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]","")
+                                        logging.info(comments)
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -170,7 +202,14 @@ while True:
                                         c = re.compile(r"</span> (.*)")
                                         comments = re.findall(c, i['content'])
                                         for i in comments:
-                                            comments = str(i).replace("[图片评论，请下载客户端新版查看]","")
+                                            comments = str(i)
+                                            zhengze = re.compile(r"<span.*?</span>")
+                                            zz_comments = re.findall(zhengze, comments)
+                                            if zz_comments:
+                                                comments = comments.replace(zz_comments[0], "")
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]", "")
+                                            else:
+                                                comments = comments.replace("[图片评论，请下载客户端新版查看]", "")
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
@@ -181,7 +220,15 @@ while True:
                                                 print(e)
                                             db.commit()
                                     else:
-                                        comments = str(i['content']).replace("[图片评论，请下载客户端新版查看]","")
+                                        comments = str(i['content'])
+                                        zhengze = re.compile(r"<span.*?</span>")
+                                        zz_comments = re.findall(zhengze, comments)
+                                        if zz_comments:
+                                            comments = comments.replace(zz_comments[0], "")
+                                            comments = comments.replace("[图片评论，请下载客户端新版查看]", "")
+                                        else:
+                                            comments = comments.replace("[图片评论，请下载客户端新版查看]", "")
+                                        logging.info(comments)
                                         with db.cursor() as cursor:
                                             try:
                                                 sql = "INSERT INTO comment_copy1(`source`,`ref_id`,`content`,`user_id_test`,`video_id_test`,`user_id_prod`,`video_id_prod`,`status`) values('美拍美妆',{},'{}',0,0,0,0,0)".format(
