@@ -42,7 +42,7 @@ def get_user(count):
         "sign": f"{a}",
     }
     response = requests.get(url="https://api.qkb-test.admin.lianzhuoxinxi.com/web/user/get", params=data)
-    print(response.content.decode())
+    # print(response.content.decode())
     return response.json().get("data")
 
 def up_vv(**kwargs):
@@ -81,3 +81,6 @@ for i in range(len(cc)):
 with conn.cursor()as cursor:
     for i,j in dic.items():
         sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j)
+        cursor.execute(sql)
+        print("chenggong")
+    conn.commit()
