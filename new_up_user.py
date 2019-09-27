@@ -79,8 +79,11 @@ for i in range(len(cc)):
     dic[video_user[i]]=[cc[i]]
 
 with conn.cursor()as cursor:
-    for i,j in dic.items():
-        sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j)
-        cursor.execute(sql)
-        print("chenggong")
-    conn.commit()
+    try:
+        for i,j in dic.items():
+            sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j)
+            cursor.execute(sql)
+            print("chenggong")
+        conn.commit()
+    except Exception as e:
+        print(e)
