@@ -106,7 +106,7 @@ def get_comment():
             response = requests.post("https://api.qkb-test.admin.lianzhuoxinxi.com/web/video/comment", data=params)
             logging.info(response.content.decode())
             with conn.cursor() as cursor:
-                sql = f"update comment_copy1 set video_id_test,user_id_test={video_id,user_id} where id = {id_}"
+                sql = f"update comment set video_id_test={video_id},user_id_test={user_id} where id = {id_}"
                 cursor.execute(sql)
             conn.commit()
 
