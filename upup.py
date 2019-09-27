@@ -49,7 +49,7 @@ def up_vv(**kwargs):
     return params
 
 with conn.cursor() as cursor:
-    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`old_app_id` from video_copy1 where video_id_test=0 and source = %s"
+    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`old_app_id` from video where video_id_test=0 and source = %s"
     args = ["美拍美妆", ]
     cursor.execute(sql,args)
     data = cursor.fetchall()
@@ -61,14 +61,14 @@ for id_, i, v, s, title, old_app_id in data:
              title=title, url=v,
              user_id=old_app_id)
     print(data)
-    # response = requests.post('https://api.qkb-test.admin.lianzhuoxinxi.com/web/video/add',data =data)
-    # print(response.content.decode())
-    # try:
-    #     video_id = response.json().get("data").get("id")
-    # except AttributeError:
-    #     continue
-    # print(video_id)
-    # with conn.cursor() as cursor:
-    #     sql = f"update video set video_id_test={video_id} where id = {id_}"
-    #     cursor.execute(sql)
-    # conn.commit()
+    response = requests.post('https://api.qkb-test.admin.lianzhuoxinxi.com/web/video/add',data =data)
+    print(response.content.decode())
+    try:
+        video_id = response.json().get("data").get("id")
+    except AttributeError:
+        continue
+    print(video_id)
+    with conn.cursor() as cursor:
+        sql = f"update video set video_id_test={video_id} where id = {id_}"
+        cursor.execute(sql)
+    conn.commit()
