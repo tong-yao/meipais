@@ -6,7 +6,11 @@
 import hashlib
 
 import pymysql
-import requests
+import requests,logging
+
+logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
+                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+                    level=logging.INFO)
 
 HOST = "47.94.204.15"
 PORT = 3306
@@ -78,12 +82,16 @@ dic = {}
 for i in range(len(cc)):
     dic[video_user[i]]=[ccs[i]]
 
+# for i,j in dic.items():
+#     print(i,j)
 with conn.cursor()as cursor:
     try:
         for i,j in dic.items():
             sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j[0])
             cursor.execute(sql)
             print("chenggong")
-        conn.commit()
+            conn.commit()
+            print(2)
+            logging.info(i,j)
     except Exception as e:
         print(e)
