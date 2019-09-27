@@ -70,18 +70,18 @@ with conn.cursor() as cursor:
     cc = cursor.fetchall()
 
 
-# ccs = [i[0] for i in cc]
+ccs = [i[0] for i in cc]
 # print(ccs)
 
 video_user = get_user(len(cc))
 dic = {}
 for i in range(len(cc)):
-    dic[video_user[i]]=[cc[i]]
+    dic[video_user[i]]=[ccs[i]]
 
 with conn.cursor()as cursor:
     try:
         for i,j in dic.items():
-            sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j)
+            sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j[0])
             cursor.execute(sql)
             print("chenggong")
         conn.commit()
