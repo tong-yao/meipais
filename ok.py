@@ -40,7 +40,7 @@ conn = connect_base_sql()
 
 def get_video_id_and_ref_id():
     with conn.cursor()as cursor:
-        sql = "select video_id_test, ref_id from spider.video_copy1"
+        sql = "select video_id_test, ref_id from spider.video"
         cursor.execute(sql)
         data = cursor.fetchall()
     return data
@@ -91,7 +91,7 @@ def get_comment():
         if video_id == 0:
             continue
         with conn.cursor() as cursor:
-            sql = "select id, content from spider.comment_copy1 where ref_id = {}".format(ref_id)
+            sql = "select id, content from spider.comment where ref_id = {}".format(ref_id)
             cursor.execute(sql)
             info = cursor.fetchall()
         print(info)
@@ -111,7 +111,7 @@ def get_comment():
             conn.commit()
 
 
-ob_url = "https://api.qkb.admin.lianzhuoxinxi.com/web/video/comment"
+# ob_url = "https://api.qkb.admin.lianzhuoxinxi.com/web/video/comment"
 
 
 """def main():
