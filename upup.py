@@ -76,6 +76,6 @@ for id_, i, v, s, title, old_app_id in data:
         continue
     print(video_id)
     with conn.cursor() as cursor:
-        sql = f"update video set video_id_test={video_id} where id = {id_}"
+        sql = f"update video set video_id_prod={video_id} where id = {id_}"
         cursor.execute(sql)
     conn.commit()
