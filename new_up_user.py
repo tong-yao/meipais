@@ -45,7 +45,8 @@ def get_user(count):
         "count": count,
         "sign": f"{a}",
     }
-    response = requests.get(url="https://api.qkb-test.admin.lianzhuoxinxi.com/web/user/get", params=data)
+    # response = requests.get(url="https://api.qkb-test.admin.lianzhuoxinxi.com/web/user/get", params=data)
+    response = requests.get(url="https://api.qkb.admin.lianzhuoxinxi.com/web/user/get", params=data)
     # print(response.content.decode())
     return response.json().get("data")
 
@@ -82,16 +83,14 @@ dic = {}
 for i in range(len(cc)):
     dic[video_user[i]]=[ccs[i]]
 
-# for i,j in dic.items():
-#     print(i,j)
+cishu = len(dic)
 with conn.cursor()as cursor:
     try:
         for i,j in dic.items():
-            sql = "update spider.video set old_app_id={} where old_app_id = {}".format(i,j[0])
+            sql = "update spider.video set video_user_id_p ={} where old_app_id = {}".format(i,j[0])
             cursor.execute(sql)
-            print("chenggong")
+            cishu -= 1
+            logging.info("chenggong{}".format(cishu))
             conn.commit()
-            print(2)
-            logging.info(i,j)
     except Exception as e:
-        print(e)
+        logging.info(e)
