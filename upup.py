@@ -52,7 +52,7 @@ def up_vv(**kwargs):
     return params
 
 with conn.cursor() as cursor:
-    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`old_app_id` from video where video_id_prod=0 and source = %s"
+    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`video_user_id_p` from video where video_id_prod=0 and source = %s"
     args = ["美拍美妆", ]
     cursor.execute(sql,args)
     data = cursor.fetchall()
