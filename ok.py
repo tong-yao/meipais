@@ -15,9 +15,9 @@ import pymysql
 import hashlib
 import requests,logging
 
-# logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
-#                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
-#                     level=logging.INFO)
+logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
+                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+                    level=logging.INFO)
 HOST = "47.94.204.15"
 PORT = 3306
 USER = "lianzhuoxinxi"
