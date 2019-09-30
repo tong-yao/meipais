@@ -66,9 +66,10 @@ for id_, i, v, s, title, old_app_id in data:
              user_id=old_app_id)
     cishu -=1
     logging.info("剩余{}".format(cishu))
+    logging.info("data",data)
 
     response = requests.post('https://api.qkb.admin.lianzhuoxinxi.com/web/video/add',data =data)
-    print(response.content.decode())
+    logging.info(response.content.decode())
     try:
         video_id = response.json().get("data").get("id")
     except AttributeError:
