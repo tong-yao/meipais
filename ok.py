@@ -15,9 +15,9 @@ import pymysql
 import hashlib
 import requests,logging
 
-logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
-                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
-                    level=logging.INFO)
+# logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
+#                     format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+#                     level=logging.INFO)
 HOST = "47.94.204.15"
 PORT = 3306
 USER = "lianzhuoxinxi"
@@ -40,8 +40,9 @@ conn = connect_base_sql()
 
 def get_video_id_and_ref_id():
     with conn.cursor()as cursor:
-        sql = "select video_id_test, ref_id from spider.video"
-        cursor.execute(sql)
+        sql = "select video_id_prod, ref_id from spider.video where source = %s"
+        args = ["美拍美妆",]
+        cursor.execute(sql,args)
         data = cursor.fetchall()
     return data
 
@@ -60,7 +61,7 @@ def get_user(count):
         "count": count,
         "sign": f"{a}",
     }
-    response = requests.get(url="https://api.qkb-test.admin.lianzhuoxinxi.com/web/user/get", params=data)
+    response = requests.get(url="https://api.qkb.admin.lianzhuoxinxi.com/web/user/get", params=data)
     print(response.content.decode())
     return response.json().get("data")
 
@@ -102,11 +103,12 @@ def get_comment():
             user_id = get_user(1)[0]
             print(user_id)
             params = up_vv(comment=comment, rand="wll", user_id=user_id, video_id=video_id)
-            print(params)
-            response = requests.post("https://api.qkb-test.admin.lianzhuoxinxi.com/web/video/comment", data=params)
+            print("datadata",params)
+            response = requests.post("https://api.qkb.admin.lianzhuoxinxi.com/web/video/comment", data=params)
             logging.info(response.content.decode())
+            logging.info("还剩{}".format(video_id))
             with conn.cursor() as cursor:
-                sql = f"update comment set video_id_test={video_id},user_id_test={user_id} where id = {id_}"
+                sql = f"update comment set video_id_prod={video_id},user_id_prod={user_id} where id = {id_}"
                 cursor.execute(sql)
             conn.commit()
 
