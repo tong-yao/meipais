@@ -6,7 +6,10 @@
 import hashlib
 
 import pymysql
-import requests
+import requests,logging
+logging.basicConfig(filename="/var/www/meipais/meipai_log.txt", filemode="a",
+                    format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+                    level=logging.INFO)
 
 HOST = "47.94.204.15"
 PORT = 3306
@@ -49,10 +52,11 @@ def up_vv(**kwargs):
     return params
 
 with conn.cursor() as cursor:
-    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`old_app_id` from video where video_id_test=0 and source = %s"
+    sql = "select `id`, `image_path`,`video_path`,`size`,`title`,`old_app_id` from video where video_id_prod=0 and source = %s"
     args = ["美拍美妆", ]
     cursor.execute(sql,args)
     data = cursor.fetchall()
+cishu = len(data)
 
 for id_, i, v, s, title, old_app_id in data:
     i = i.replace("/home/oss","https://c3.123qkk.com")
@@ -60,8 +64,10 @@ for id_, i, v, s, title, old_app_id in data:
     data = up_vv(cover_img=i, rand="zyn", size=s,
              title=title, url=v,
              user_id=old_app_id)
-    print(data)
-    response = requests.post('https://api.qkb-test.admin.lianzhuoxinxi.com/web/video/add',data =data)
+    cishu -=1
+    logging.info("剩余{}".format(cishu))
+
+    response = requests.post('https://api.qkb.admin.lianzhuoxinxi.com/web/video/add',data =data)
     print(response.content.decode())
     try:
         video_id = response.json().get("data").get("id")
